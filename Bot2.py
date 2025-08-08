@@ -6,7 +6,7 @@ from google.api_core import exceptions # +++ This is the new import line +++
 
 # --- Page Configuration ---
 st.set_page_config(
-    page_title="Codidiot AI Master",
+    page_title="QuantWeb AI",
     page_icon="🤖",
     layout="centered"
 )
@@ -93,7 +93,9 @@ def get_ai_response(history, user_prompt):
 
 # --- Streamlit App UI ---
 
-st.title("Gamkers AI Assistant 🌐")
+st.title("Codidiot AI Master")
+st.header("Developed by Logesh")
+st.markdown("---")
 
 if "messages" not in st.session_state:
     st.session_state.messages = [
@@ -139,4 +141,5 @@ if user_prompt:
             except Exception as e:
                 error_message = f"An unexpected error occurred. Please try again. Details: {e}"
                 st.error(error_message)
+
 
