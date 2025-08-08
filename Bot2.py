@@ -94,7 +94,7 @@ def get_ai_response(history, user_prompt):
 # --- Streamlit App UI ---
 
 st.title("Codidiot AI Master")
-st.marjdown("Developed by Logesh")
+st.markdown("Developed by Logesh")
 st.markdown("---")
 
 if "messages" not in st.session_state:
@@ -141,6 +141,7 @@ if user_prompt:
             except Exception as e:
                 error_message = f"An unexpected error occurred. Please try again. Details: {e}"
                 st.error(error_message)
+
 
 
 
