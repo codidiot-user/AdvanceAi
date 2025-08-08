@@ -2,6 +2,7 @@ import streamlit as st
 import google.generativeai as genai
 import requests
 import json
+from google.api_core import exceptions
 
 # --- Page Configuration ---
 st.set_page_config(
@@ -10,15 +11,23 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- API Configuration ---
-try:
-    # Configure the API keys securely using Streamlit Secrets
-    genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
-    SERPER_API_KEY = st.secrets["SERPER_API_KEY"]
-except (KeyError, FileNotFoundError):
-    st.error("ERROR: API keys not found. Please add GOOGLE_API_KEY and SERPER_API_KEY to your .streamlit/secrets.toml file.")
-    st.stop()
+# Find this section in your code
 
+try:
+    # ... (the code to get the AI response) ...
+
+# --- THIS IS THE LINE TO CHANGE ---
+
+# OLD LINE
+# except google.api_core.exceptions.ResourceExhausted as e:
+
+# NEW LINE
+except exceptions.ResourceExhausted as e:
+    error_message = "I'm receiving too many requests right now. Please wait a moment before sending another message."
+    st.error(error_message)
+
+except Exception as e:
+    # ... (the rest of the code) ...
 
 # --- System Prompt: The AI's "Brain" ---
 SYSTEM_PROMPT = """
@@ -138,3 +147,4 @@ if user_prompt:
             except Exception as e:
                 error_message = f"An unexpected error occurred. Please try again. Details: {e}"
                 st.error(error_message)
+
