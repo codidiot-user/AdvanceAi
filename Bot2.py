@@ -6,7 +6,7 @@ from google.api_core import exceptions # +++ This is the new import line +++
 
 # --- Page Configuration ---
 st.set_page_config(
-    page_title="Codidiot AI",
+    page_title="Codidiot AI Master",
     page_icon="🤖",
     layout="centered"
 )
@@ -139,3 +139,4 @@ if user_prompt:
             except Exception as e:
                 error_message = f"An unexpected error occurred. Please try again. Details: {e}"
                 st.error(error_message)
+
