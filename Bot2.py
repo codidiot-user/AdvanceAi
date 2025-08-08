@@ -94,7 +94,7 @@ def get_ai_response(history, user_prompt):
 # --- Streamlit App UI ---
 
 st.title("Codidiot AI Master")
-st.header("Developed by Logesh")
+st.marjdown("Developed by Logesh")
 st.markdown("---")
 
 if "messages" not in st.session_state:
@@ -119,7 +119,7 @@ if user_prompt:
 
     # Generate and display bot's response
     with st.chat_message("model"):
-        with st.spinner("Gamkers is thinking..."):
+        with st.spinner("Getting Better results..."):
             try:
                 # Get the AI response, which now returns both the text and whether a search was performed
                 response_data, searched_web = get_ai_response(st.session_state.messages, user_prompt)
@@ -141,5 +141,6 @@ if user_prompt:
             except Exception as e:
                 error_message = f"An unexpected error occurred. Please try again. Details: {e}"
                 st.error(error_message)
+
 
 
