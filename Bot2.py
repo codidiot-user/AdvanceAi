@@ -2,36 +2,28 @@ import streamlit as st
 import google.generativeai as genai
 import requests
 import json
-from google.api_core import exceptions
+from google.api_core import exceptions # +++ This is the new import line +++
 
 # --- Page Configuration ---
 st.set_page_config(
-    page_title="Gamkers AI",
+    page_title="Codidiot AI",
     page_icon="🤖",
     layout="centered"
 )
 
-# Find this section in your code
-
+# --- API Configuration ---
 try:
-    # ... (the code to get the AI response) ...
+    # Configure the API keys securely using Streamlit Secrets
+    genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+    SERPER_API_KEY = st.secrets["SERPER_API_KEY"]
+except (KeyError, FileNotFoundError):
+    st.error("ERROR: API keys not found. Please add GOOGLE_API_KEY and SERPER_API_KEY to your .streamlit/secrets.toml file.")
+    st.stop()
 
-# --- THIS IS THE LINE TO CHANGE ---
-
-# OLD LINE
-# except google.api_core.exceptions.ResourceExhausted as e:
-
-# NEW LINE
-except exceptions.ResourceExhausted as e:
-    error_message = "I'm receiving too many requests right now. Please wait a moment before sending another message."
-    st.error(error_message)
-
-except Exception as e:
-    # ... (the rest of the code) ...
 
 # --- System Prompt: The AI's "Brain" ---
 SYSTEM_PROMPT = """
-You are "Gamkers," a professional AI assistant created by Akash M. 
+You are "Gamkers," a professional AI assistant created by Akash M.
 Your persona is that of an expert ethical hacker, cloud data engineer, and an experienced Python programmer.
 
 Your capabilities include:
@@ -63,7 +55,7 @@ def perform_web_search(query: str):
 def get_ai_response(history, user_prompt):
     """Orchestrates the AI response, deciding whether to search the web."""
     model = genai.GenerativeModel('gemini-1.5-flash')
-    
+
     # First, ask a simple model if a web search is necessary
     search_checker_prompt = f"Does the following user query require a real-time web search to answer accurately? Query: '{user_prompt}'. Respond with only 'YES' or 'NO'."
     search_decision_model = genai.GenerativeModel('gemini-1.5-flash')
@@ -76,7 +68,7 @@ def get_ai_response(history, user_prompt):
         searched_web = True
         st.write("Performing a real-time web search...")
         search_results = perform_web_search(user_prompt)
-        
+
         # Create a new prompt that includes the search results for the main model
         final_prompt_for_history = f"""
         Based on the following web search results, please provide a comprehensive answer to the user's original query.
@@ -129,22 +121,21 @@ if user_prompt:
             try:
                 # Get the AI response, which now returns both the text and whether a search was performed
                 response_data, searched_web = get_ai_response(st.session_state.messages, user_prompt)
-                
+
                 # Show an indicator if a web search was used
                 if searched_web:
                     st.info("I've used real-time web search to answer your question.", icon="💡")
-                
+
                 st.markdown(response_data)
-                
+
                 # Add the successful response to history
                 st.session_state.messages.append({"role": "model", "parts": [response_data]})
-            
-            # This is the robust error handling for API limits
-            except google.api_core.exceptions.ResourceExhausted as e:
+
+            # +++ This is the updated error handling block +++
+            except exceptions.ResourceExhausted as e:
                 error_message = "I'm receiving too many requests right now. Please wait a moment before sending another message."
                 st.error(error_message)
-            
+
             except Exception as e:
                 error_message = f"An unexpected error occurred. Please try again. Details: {e}"
                 st.error(error_message)
-
