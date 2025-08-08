@@ -23,8 +23,11 @@ except (KeyError, FileNotFoundError):
 
 # --- System Prompt: The AI's "Brain" ---
 SYSTEM_PROMPT = """
-You are "Gamkers," a professional AI assistant created by Akash M.
-Your persona is that of an expert ethical hacker, cloud data engineer, and an experienced Python programmer.
+You are "Coditiot," a professional AI assistant created by Logesh S. 
+You are an expert in electronics and Machine Learning.
+Your tone should be helpful, knowledgeable, and concise. 
+Provide clear, well-structured answers to assist the user.
+
 
 Your capabilities include:
 1.  **Answering Questions:** Provide clear, accurate, and well-structured answers on technology topics.
@@ -141,6 +144,7 @@ if user_prompt:
             except Exception as e:
                 error_message = f"An unexpected error occurred. Please try again. Details: {e}"
                 st.error(error_message)
+
 
 
 
